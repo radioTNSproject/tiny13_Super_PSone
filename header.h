@@ -1,7 +1,5 @@
 #include <avr/io.h>
 #include <util/delay.h>
-//#include <avr/interrupt.h>
-
 
 #define GREEN_LED PB0
 #define RED_LED PB1

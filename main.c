@@ -1,5 +1,6 @@
-#define F_CPU 1000000L
 #include "header.h"
+#define F_CPU 1000000L
+
 
 uint8_t SetAllPorts()
 {
@@ -10,23 +11,9 @@ uint8_t SetAllPorts()
     return 1;
 }
 
-/* ISR(PCINT0_vect)	     // interrupt service routine
-{			             // called when PCINT0 changes state   
-   myTimer = 0;
-   if (sysState == ERROR)
-        sysState = NORMAL;
-}
-
-ISR(TIM0_OVF_vect)
-{
-    myTimer++;
-    if (myTimer >= 250)     // Should be after 4sec
-        sysState = ERROR; 
-} */
-
 uint8_t SetTimersPWM()
 {
-    TCCR0B |= ((1 << CS01) | (1 << CS00)) ;     // Set Timer 0 prescaler to clock/8. At 1 MHz this is 125 kHz.    
+    TCCR0B |= ((1 << CS01) | (1 << CS00)) ;     // Set Timer 0 prescaler   
     TCCR0A = (1 << WGM01) | (1 << WGM00) | (1 << COM0B1) | (1 << COM0A1) | (1 << COM0B0) | (1 << COM0A0);  // Set to 'Fast PWM' mode, Set OC0B and OC0A output on compare match, upwards counting.
     return 1;
 }
@@ -83,7 +70,7 @@ uint8_t SetLedOff()
 uint8_t PwrButtonOn()
 {
     // Returns 1 only if PB4 = 0 , button is pressed
-    //return (PINB & PB4) ? 0 : 1;  
+    //  return (PINB & PB4) ? 0 : 1;  // Didn' work on attiny
     if(PINB & (1<<PB4))
     {
         return 0;
@@ -144,7 +131,7 @@ int main(void)
                 }
                 break; 
 
-            case ERROR :                    // abandonned
+            case ERROR :                        // abandonned
                 SetAlarm();
                 break; 
 
@@ -177,70 +164,4 @@ int main(void)
         }
     }
 }
-
-
-
-/*
-    DDRB |= (1 << DATA);
-    DDRB |= (1 << LATCH);
-    DDRB |= (1 << CLOCK);
-    DDRB |= (1 << LED);
-
-    
-    uint8_t test =0;
-    test++;
-    
-    unsigned char sample = 15;
-    while(1)
-    {
-        sample = 0;
-        for(int i = 0; i <= 8; i++)
-        {
-            push8(sample);
-            sample = sample*2 + 1; //bar
-            //sample++; //incremental
-            //sample *= 2; //chenillard
-            _delay_ms(500);
-            OCR0B = i*8;
-            
-        }
-        
-        for(int i = 0; i <= 128; i++)
-        {
-            OCR0B = i;
-            _delay_ms(8);
-        }
-        for(int i = 128; i != 0; i--)
-        {
-            OCR0B = i;
-            _delay_ms(8);
-        }
-    }
-    return 0;
-    
-
-    } //End of while loop
-}
-
-pseudo code:
-PCMSK = (1 << PCINT3) | (1 << any other PCINTx, etc.) - select which pin or pins trigger PCINT0
-GIFR |= (1 << PCIF) - clear any already pending PCINT0 interrupt flag
-GIMSK |= (1 << PCIE) - enable the pin change interrupt
-Don't forget the SEI
-
-
-ISR(PCINT0_vect)	     // interrupt service routine
-{			     // called when PCINT0 changes state
-   PORTB = (PORTB ^ 0x16);   // toggle red led, portb bit 5, pin 3
-   return;
-}
-
-void SystemInit(void)
-{
-	PCMSK |= (1<<PCINT1);	// pin change mask: listen to portb bit 2
-	GIMSK |= (1<<PCIE);	// enable PCINT interrupt 
-	sei();			// enable all interrupts
-}
-
-*/
 
