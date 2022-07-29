@@ -7,7 +7,7 @@ The tiny will deal with Power On/Off, reset, and Standby, it acts on the EN pin 
 
 Orange LED is Standby (was only green on original PSX)
 
-Picture of system before installing the raspberry, the tiny is on top right, neqr the MaxWell 5V/5A power supply :
+Picture of system before installing the raspberry, the tiny is on top right, near the MaxWell 5V/5A power supply :
 
 ![alt text](img/signal-2021-03-23-18-03-11-215_mini.jpg)
 
